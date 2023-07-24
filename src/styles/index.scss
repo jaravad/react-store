@@ -18,3 +18,34 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0;
   font-weight: 600;
 }
+
+p {
+  margin: 0
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+
+  @media (max-width: 900px) {
+    & {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 650px) {
+    & {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}

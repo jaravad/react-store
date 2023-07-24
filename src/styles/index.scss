@@ -32,6 +32,10 @@ p {
   margin-bottom: 1rem;
 }
 
+.pt-1 {
+  padding-top: 1rem;
+}
+
 .products-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -47,5 +51,17 @@ p {
     & {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 650px) {
+  body {
+    font-size: 14px;
   }
 }

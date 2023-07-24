@@ -1,26 +1,36 @@
-import { NumberFormatValues, NumericFormat } from 'react-number-format';
-import { ChangeEvent, useState } from 'react';
+import { NumericFormat } from 'react-number-format';
+import { ChangeEvent, useState, useContext } from 'react';
+import { StoreDispatchContext } from '../utils/contexts';
+import { AddProductType } from '../types';
+
+const initialState: AddProductType = {
+  name: '',
+  price: '',
+  amount: '',
+};
 
 const AddProduct = () => {
-  const [inputValues, setInputValues] = useState({
-    name: '',
-    price: null,
-    quantity: null,
-  });
+  const [inputValues, setInputValues] = useState(initialState);
 
-  const { name, price, quantity } = inputValues;
+  const dispatch = useContext(StoreDispatchContext);
 
-  const handleInputChange = (inputName: string) => (e: ChangeEvent) => {
+  const handleNameChange = (e: ChangeEvent) => {
     const target = e.target as HTMLInputElement;
-    setInputValues((prevValues) => ({
-      ...prevValues,
-      [inputName]: target.value,
-    }));
+    setInputValues((prevValues) => ({ ...prevValues, name: target.value }));
+  };
+
+  const handlePriceChange = (value: number | string) => {
+    setInputValues((prevValues) => ({ ...prevValues, price: value }));
+  };
+
+  const handleAmountChange = (value: number | string) => {
+    setInputValues((prevValues) => ({ ...prevValues, amount: value }));
   };
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(inputValues);
+    dispatch({ type: 'addProduct', payload: inputValues });
+    setInputValues(initialState);
   };
 
   return (
@@ -38,8 +48,8 @@ const AddProduct = () => {
             autoComplete="off"
             placeholder="Ingrese nombre"
             className="custom-input"
-            value={name}
-            onChange={handleInputChange('name')}
+            value={inputValues.name}
+            onChange={handleNameChange}
           />
         </div>
         <div className="mb-1">
@@ -53,25 +63,33 @@ const AddProduct = () => {
             autoComplete="off"
             placeholder="Ingrese precio"
             className="custom-input"
-            value={price}
+            value={inputValues.price}
             prefix="$"
             thousandSeparator
-            onChange={handleInputChange('price')}
+            valueIsNumericString
+            allowLeadingZeros={false}
+            onValueChange={(values) => {
+              handlePriceChange(values.floatValue);
+            }}
           />
         </div>
         <div className="mb-1">
-          <label className="custom-label" htmlFor="quantity">
+          <label className="custom-label" htmlFor="amount">
             Cantidad
           </label>
           <NumericFormat
             type="text"
-            id="quantity"
-            name="quantity"
+            id="amount"
+            name="amount"
             autoComplete="off"
             placeholder="Ingrese cantidad"
             className="custom-input"
-            value={quantity}
-            onChange={handleInputChange('quantity')}
+            value={inputValues.amount}
+            valueIsNumericString
+            allowLeadingZeros={false}
+            onValueChange={(values) => {
+              handleAmountChange(values.floatValue);
+            }}
           />
         </div>
         <button type="submit" className="btn">

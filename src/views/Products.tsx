@@ -1,14 +1,15 @@
-import { useState } from 'react';
+import { useContext } from 'react';
 import ProductCard from '../components/ProductCard';
-import data from '../data.json';
+import { StoreContext } from '../utils/contexts';
+import { ProductType } from '../types';
 
 const Products = () => {
-  const [products] = useState(data.products);
+  const { products } = useContext(StoreContext);
   return (
     <div className="container pt-1">
       <h1 className="mb-1">Productos</h1>
       <div className="products-grid">
-        {products.map((product) => (
+        {products.map((product: ProductType) => (
           <ProductCard {...product} key={product.id} />
         ))}
       </div>

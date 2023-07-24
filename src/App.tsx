@@ -4,31 +4,38 @@ import {
   Outlet,
   BrowserRouter as Router,
 } from 'react-router-dom';
+import { useReducer } from 'react';
+import { StoreContext, StoreDispatchContext } from './utils/contexts';
+import appReducer from './utils/reducer';
+import data from './data.json';
 
 import NavBar from './components/NavBar';
 import Products from './views/Products';
 import AddProduct from './views/AddProduct';
 import Cart from './views/Cart';
 
-function App() {
-  return (
-    <>
-      <Router>
-        <NavBar />
-        <Routes>
-          <Route path="/" element={<Products />} />
-          {/* <Route index element={<Home />} /> */}
-          <Route path="/add-product" element={<AddProduct />} />
-          <Route path="/cart" element={<Cart />} />
+const initialState = {
+  products: data.products,
+  cart: [],
+};
 
-          {/* Using path="*"" means "match anything", so this route
-                acts like a catch-all for URLs that we don't have explicit
-                routes for. */}
-          <Route path="*" element={<Products />} />
-        </Routes>
-      </Router>
-      <Outlet />
-    </>
+function App() {
+  const [store, dispatch] = useReducer(appReducer, initialState);
+  return (
+    <StoreContext.Provider value={store}>
+      <StoreDispatchContext.Provider value={dispatch}>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Products />} />
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<Products />} />
+          </Routes>
+        </Router>
+        <Outlet />
+      </StoreDispatchContext.Provider>
+    </StoreContext.Provider>
   );
 }
 

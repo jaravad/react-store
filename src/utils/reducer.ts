@@ -32,6 +32,7 @@ const appReducer = (currentState: AppStateType, action) => {
             ...currentCartItems,
             { ...action.payload, amount: 1 },
           ];
+          newTotal = getCartTotal(updatedItems);
         } else {
           const productInCart = currentCartItems[index];
           const productAmount = currentState.products.find((product) => {
@@ -44,8 +45,20 @@ const appReducer = (currentState: AppStateType, action) => {
               amount: updatedItems[index].amount + 1,
             };
           }
+          newTotal = getCartTotal(updatedItems);
         }
       }
+      return {
+        ...currentState,
+        cart: { items: updatedItems, total: newTotal },
+      };
+    }
+    case 'deleteFromCart': {
+      const currentCartItems = currentState.cart.items;
+      const updatedItems = currentCartItems.filter(
+        (item) => item.id !== action.payload
+      );
+      const newTotal = getCartTotal(updatedItems);
       return {
         ...currentState,
         cart: { items: updatedItems, total: newTotal },

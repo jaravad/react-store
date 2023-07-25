@@ -10,6 +10,9 @@ const StyledArticle = styled.article`
   border-radius: 6px;
   padding: 1rem;
   border: 1px solid #e4e4e4;
+  button {
+    margin-top: 0.3rem;
+  }
 `;
 
 const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
@@ -23,9 +26,11 @@ const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
     <StyledArticle>
       <h3>{name}</h3>
       <h4>{formatCurrency(price)}</h4>
-      <small>
-        {amount} disponible{amount > 1 ? 's' : ''}
-      </small>
+      <p>
+        <small>
+          {amount} disponible{amount > 1 ? 's' : ''}
+        </small>
+      </p>
       <button className="btn" onClick={handleClick}>
         <small>Añadir al carrito</small>
       </button>

@@ -50,12 +50,25 @@ input {
   color: white;
   border-radius: 0.25rem;
   cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
   transition: background-color 200ms ease;
   &:hover {
     background-color: rgba(33,33,33, 0.8);
   }
   &--full {
     width: 100%;
+  }
+  &--sm {
+    padding: 0.25rem 0.5rem;
+    font-size: .875rem;
+  }
+  &--danger {
+    color: white;
+    background-color: rgb(220, 53, 69);
+    &:hover {
+      background-color: rgba(220, 53, 69, 0.8);
+    }
   }
 }
 
@@ -92,12 +105,24 @@ input {
 
 .add-product__form {
   max-width: 450px;
-  width: 100%;
+  width: 90%;
 }
 
 .cart__container {
   max-width: 450px;
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
+
+  .total-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .cart__empty-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 @media (max-width: 900px) {

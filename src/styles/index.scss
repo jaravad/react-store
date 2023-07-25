@@ -95,6 +95,11 @@ input {
   width: 100%;
 }
 
+.cart__container {
+  max-width: 450px;
+  width: 100%;
+}
+
 @media (max-width: 900px) {
   body {
     font-size: 15px;

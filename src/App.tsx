@@ -16,7 +16,7 @@ import Cart from './views/Cart';
 
 const initialState = {
   products: data.products,
-  cart: [],
+  cart: { items: [], total: 0 },
 };
 
 function App() {

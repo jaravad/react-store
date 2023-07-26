@@ -5,6 +5,7 @@ import {
   BrowserRouter as Router,
 } from 'react-router-dom';
 import { useReducer } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { StoreContext, StoreDispatchContext } from './utils/contexts';
 import appReducer from './utils/reducer';
 import data from './data.json';
@@ -25,6 +26,7 @@ function App() {
     <StoreContext.Provider value={store}>
       <StoreDispatchContext.Provider value={dispatch}>
         <Router>
+          <Toaster position="top-center" reverseOrder={false} />
           <NavBar />
           <Routes>
             <Route path="/" element={<Products />} />

@@ -1,5 +1,6 @@
 import { getCartTotal } from '../utils';
 import { AppStateType, ProductType } from '../types';
+import toast from 'react-hot-toast';
 
 const appReducer = (currentState: AppStateType, action) => {
   switch (action.type) {
@@ -11,6 +12,7 @@ const appReducer = (currentState: AppStateType, action) => {
               ...currentProducts.map((product: ProductType) => product.id)
             ) + 1
           : 1;
+      toast.success('Producto añadido');
       return {
         ...currentState,
         products: [...currentState.products, { ...action.payload, id: newId }],
@@ -48,6 +50,7 @@ const appReducer = (currentState: AppStateType, action) => {
           newTotal = getCartTotal(updatedItems);
         }
       }
+      toast.success('Producto añadido al carrito');
       return {
         ...currentState,
         cart: { items: updatedItems, total: newTotal },
@@ -62,6 +65,23 @@ const appReducer = (currentState: AppStateType, action) => {
       return {
         ...currentState,
         cart: { items: updatedItems, total: newTotal },
+      };
+    }
+    case 'completePurchase': {
+      const currentProducts = currentState.products;
+      const updatedProducts = [...currentProducts];
+      action.payload.forEach((productInCart) => {
+        const index = currentProducts.findIndex(
+          (product) => product.id === productInCart.id
+        );
+        const productToUpdate = currentProducts[index];
+        productToUpdate.amount = productToUpdate.amount - productInCart.amount;
+        updatedProducts[index] = productToUpdate;
+      });
+      toast.success('Compra completada');
+      return {
+        products: updatedProducts,
+        cart: { items: [], total: 0 },
       };
     }
     default: {

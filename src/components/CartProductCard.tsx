@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styled from 'styled-components';
 import { formatCurrency } from '../utils';
 import { useContext } from 'react';
@@ -21,9 +22,11 @@ const StyledArticle = styled.article`
 
 const CartProductCard = ({ name, amount, price, id }) => {
   const dispatch = useContext(StoreDispatchContext);
+
   const handleDeleteClick = () => {
     dispatch({ type: 'deleteFromCart', payload: id });
   };
+
   return (
     <StyledArticle>
       <h3>{name}</h3>
@@ -37,10 +40,10 @@ const CartProductCard = ({ name, amount, price, id }) => {
         <button className="btn btn--sm btn--danger" onClick={handleDeleteClick}>
           Eliminar
         </button>
-        <h4>{formatCurrency(price * amount)}</h4>
+        <h3>{formatCurrency(price * amount)}</h3>
       </div>
     </StyledArticle>
   );
 };
 
-export default CartProductCard;
+export default memo(CartProductCard);

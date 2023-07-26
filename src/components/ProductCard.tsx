@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 
-import { ProductCardProps } from '../types';
+import { AppStateType, ProductCardProps } from '../types';
 import { formatCurrency } from '../utils';
 import { useContext } from 'react';
-import { StoreDispatchContext } from '../utils/contexts';
+import { StoreContext, StoreDispatchContext } from '../utils/contexts';
+import Spinner from './Spinner';
 
 const StyledArticle = styled.article`
   border-radius: 6px;
@@ -17,9 +18,24 @@ const StyledArticle = styled.article`
 
 const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
   const dispatch = useContext(StoreDispatchContext);
+  const state: AppStateType = useContext(StoreContext);
+
+  const [loading, setLoading] = useState(false);
+
+  let outOfStock = false;
+  const cartItems = state.cart.items;
+
+  const productInCart = cartItems.find((item) => item.id === id);
+  if (productInCart && productInCart.amount >= amount) {
+    outOfStock = true;
+  }
 
   const handleClick = () => {
-    dispatch({ type: 'addToCart', payload: { name, price, amount, id } });
+    setLoading(true);
+    setTimeout(() => {
+      dispatch({ type: 'addToCart', payload: { name, price, amount, id } });
+      setLoading(false);
+    }, 1500);
   };
 
   return (
@@ -31,8 +47,15 @@ const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
           {amount} disponible{amount > 1 ? 's' : ''}
         </small>
       </p>
-      <button className="btn" onClick={handleClick}>
-        <small>Añadir al carrito</small>
+      <button
+        className="btn"
+        onClick={handleClick}
+        disabled={outOfStock || loading}
+      >
+        {loading && <Spinner className="absolute-center" />}
+        <small style={{ visibility: loading ? 'hidden' : 'visible' }}>
+          Añadir al carrito
+        </small>
       </button>
     </StyledArticle>
   );

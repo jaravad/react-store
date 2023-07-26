@@ -19,11 +19,12 @@ const Cart = () => {
               return <CartProductCard key={item.id} {...item} />;
             })}
             {total > 0 ? (
-              <div className="total-container">
+              <div className="total-container mb-1">
                 <h2>Total</h2>
                 <h2>{formatCurrency(total)}</h2>
               </div>
             ) : null}
+            <button className="btn btn--full">Comprar</button>
           </>
         ) : (
           <div className="cart__empty-group">

@@ -92,7 +92,7 @@ const AddProduct = () => {
             }}
           />
         </div>
-        <button type="submit" className="btn">
+        <button type="submit" className="btn btn--full">
           Añadir
         </button>
       </form>

@@ -26,14 +26,16 @@ const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
   const cartItems = state.cart.items;
 
   const productInCart = cartItems.find((item) => item.id === id);
-  if (productInCart && productInCart.amount >= amount) {
+  if ((productInCart && productInCart.amount >= amount) || amount === 0) {
     outOfStock = true;
   }
 
   const handleClick = () => {
     setLoading(true);
     setTimeout(() => {
-      dispatch({ type: 'addToCart', payload: { name, price, amount, id } });
+      if (!outOfStock) {
+        dispatch({ type: 'addToCart', payload: { name, price, amount, id } });
+      }
       setLoading(false);
     }, 1500);
   };
@@ -44,7 +46,8 @@ const ProductCard = ({ name, price, amount, id }: ProductCardProps) => {
       <h4>{formatCurrency(price)}</h4>
       <p>
         <small>
-          {amount} disponible{amount > 1 ? 's' : ''}
+          {amount} disponible{amount > 1 ? 's' : ''}{' '}
+          {productInCart && `(${productInCart.amount} en el carrito)`}
         </small>
       </p>
       <button

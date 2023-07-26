@@ -14,11 +14,25 @@ import NavBar from './components/NavBar';
 import Products from './views/Products';
 import AddProduct from './views/AddProduct';
 import Cart from './views/Cart';
+import { AppStateType } from './types';
 
-const initialState = {
-  products: data.products,
-  cart: { items: [], total: 0 },
+let initialState: AppStateType;
+const defaultProducts = data.products;
+const defaultCart = { items: [], total: 0 };
+const storedProducts = JSON.parse(localStorage.getItem('products'));
+const storedCart = JSON.parse(localStorage.getItem('cart'));
+
+initialState = {
+  products: storedProducts ? storedProducts : defaultProducts,
+  cart: storedCart ? storedCart : defaultCart,
 };
+
+if (!storedProducts) {
+  localStorage.setItem('products', JSON.stringify(defaultProducts));
+}
+if (!storedCart) {
+  localStorage.setItem('cart', JSON.stringify(defaultCart));
+}
 
 function App() {
   const [store, dispatch] = useReducer(appReducer, initialState);

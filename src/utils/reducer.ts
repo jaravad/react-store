@@ -12,10 +12,15 @@ const appReducer = (currentState: AppStateType, action) => {
               ...currentProducts.map((product: ProductType) => product.id)
             ) + 1
           : 1;
+      const updatedProducts = [
+        ...currentProducts,
+        { ...action.payload, id: newId },
+      ];
+      localStorage.setItem('products', JSON.stringify(updatedProducts));
       toast.success('Producto añadido');
       return {
         ...currentState,
-        products: [...currentState.products, { ...action.payload, id: newId }],
+        products: updatedProducts,
       };
     }
     case 'addToCart': {
@@ -50,6 +55,10 @@ const appReducer = (currentState: AppStateType, action) => {
           newTotal = getCartTotal(updatedItems);
         }
       }
+      localStorage.setItem(
+        'cart',
+        JSON.stringify({ items: updatedItems, total: newTotal })
+      );
       toast.success('Producto añadido al carrito');
       return {
         ...currentState,
@@ -62,6 +71,10 @@ const appReducer = (currentState: AppStateType, action) => {
         (item) => item.id !== action.payload
       );
       const newTotal = getCartTotal(updatedItems);
+      localStorage.setItem(
+        'cart',
+        JSON.stringify({ items: updatedItems, total: newTotal })
+      );
       return {
         ...currentState,
         cart: { items: updatedItems, total: newTotal },
@@ -78,6 +91,8 @@ const appReducer = (currentState: AppStateType, action) => {
         productToUpdate.amount = productToUpdate.amount - productInCart.amount;
         updatedProducts[index] = productToUpdate;
       });
+      localStorage.setItem('products', JSON.stringify(updatedProducts));
+      localStorage.setItem('cart', JSON.stringify({ items: [], total: 0 }));
       toast.success('Compra completada');
       return {
         products: updatedProducts,

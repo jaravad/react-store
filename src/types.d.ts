@@ -14,8 +14,8 @@ export interface ProductType {
 
 export interface AddProductType {
   name: string;
-  price: number | string;
-  amount: number | string;
+  price: number;
+  amount: number;
 }
 
 export interface CartItem extends ProductType {

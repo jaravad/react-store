@@ -1,96 +1,93 @@
 import { NumericFormat } from 'react-number-format';
-import { ChangeEvent, useState, useContext } from 'react';
+import { useContext } from 'react';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { StoreDispatchContext } from '../utils/contexts';
 import { AddProductType } from '../types';
 
-const initialState: AddProductType = {
-  name: '',
-  price: '',
-  amount: '',
-};
+const FormSchema = yup
+  .object({
+    name: yup.string().required(),
+    price: yup.number().required().positive(),
+    amount: yup.number().required().positive(),
+  })
+  .required();
+type FormData = yup.InferType<typeof FormSchema>;
 
 const AddProduct = () => {
-  const [inputValues, setInputValues] = useState(initialState);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<AddProductType>({
+    resolver: yupResolver(FormSchema),
+  });
 
   const dispatch = useContext(StoreDispatchContext);
 
-  const handleNameChange = (e: ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    setInputValues((prevValues) => ({ ...prevValues, name: target.value }));
-  };
-
-  const handlePriceChange = (value: number | string) => {
-    setInputValues((prevValues) => ({ ...prevValues, price: value }));
-  };
-
-  const handleAmountChange = (value: number | string) => {
-    setInputValues((prevValues) => ({ ...prevValues, amount: value }));
-  };
-
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    dispatch({ type: 'addProduct', payload: inputValues });
-    setInputValues(initialState);
+  const onSubmit = (data: FormData) => {
+    dispatch({ type: 'addProduct', payload: data });
+    reset();
   };
 
   return (
     <div className="container pt-1">
       <h1 className="mb-1">Añadir producto</h1>
-      <form action="" className="add-product__form" onSubmit={handleFormSubmit}>
+      <form className="add-product__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-1">
           <label className="custom-label" htmlFor="name">
             Nombre del producto
           </label>
           <input
-            type="text"
+            {...register('name')}
             id="name"
-            name="name"
             autoComplete="off"
             placeholder="Ingrese nombre"
             className="custom-input"
-            value={inputValues.name}
-            onChange={handleNameChange}
           />
+          {errors.name && <small>Campo requerido</small>}
         </div>
         <div className="mb-1">
           <label className="custom-label" htmlFor="price">
             Precio
           </label>
           <NumericFormat
-            type="text"
+            {...register('price')}
             id="price"
-            name="price"
             autoComplete="off"
             placeholder="Ingrese precio"
             className="custom-input"
-            value={inputValues.price}
             prefix="$"
             thousandSeparator
             valueIsNumericString
             allowLeadingZeros={false}
             onValueChange={(values) => {
-              handlePriceChange(values.floatValue);
+              setValue('price', values.floatValue);
             }}
           />
+          {errors.price && <small>Campo requerido</small>}
         </div>
         <div className="mb-1">
           <label className="custom-label" htmlFor="amount">
             Cantidad
           </label>
           <NumericFormat
-            type="text"
+            {...register('amount')}
             id="amount"
-            name="amount"
             autoComplete="off"
             placeholder="Ingrese cantidad"
             className="custom-input"
-            value={inputValues.amount}
             valueIsNumericString
+            allowNegative={false}
             allowLeadingZeros={false}
             onValueChange={(values) => {
-              handleAmountChange(values.floatValue);
+              setValue('amount', values.floatValue);
             }}
           />
+          {errors.amount && <small>Campo requerido</small>}
         </div>
         <button type="submit" className="btn btn--full">
           Añadir

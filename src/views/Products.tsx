@@ -7,7 +7,7 @@ import EmptyCallToAction from '../components/EmptyCallToAction';
 const Products = () => {
   const { products } = useContext(StoreContext);
   return (
-    <div className="container pt-1">
+    <div className="container pt-1 pb-2">
       <h1 className="mb-1">Productos</h1>
       {products.length > 0 ? (
         <div className="products-grid">

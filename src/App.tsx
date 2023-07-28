@@ -4,9 +4,13 @@ import {
   Outlet,
   BrowserRouter as Router,
 } from 'react-router-dom';
-import { useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { StoreContext, StoreDispatchContext } from './utils/contexts';
+import {
+  DarkModeContext,
+  StoreContext,
+  StoreDispatchContext,
+} from './utils/contexts';
 import appReducer from './utils/reducer';
 import data from './data.json';
 
@@ -33,23 +37,46 @@ if (!storedProducts) {
 if (!storedCart) {
   localStorage.setItem('cart', JSON.stringify(defaultCart));
 }
+const isDarkMode = Boolean(JSON.parse(localStorage.getItem('darkMode')));
 
 function App() {
   const [store, dispatch] = useReducer(appReducer, initialState);
+  const [darkMode, setDarkMode] = useState(isDarkMode);
+
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      if (document.body.classList.contains('dark-mode')) {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+  }, [darkMode]);
+
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const newValue = !prev;
+      localStorage.setItem('darkMode', newValue.toString());
+      return newValue;
+    });
+  };
+
   return (
     <StoreContext.Provider value={store}>
       <StoreDispatchContext.Provider value={dispatch}>
-        <Router>
-          <Toaster position="top-center" reverseOrder={false} />
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<Products />} />
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="*" element={<Products />} />
-          </Routes>
-        </Router>
-        <Outlet />
+        <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
+          <Router>
+            <Toaster position="top-center" reverseOrder={false} />
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<Products />} />
+              <Route path="/add-product" element={<AddProduct />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<Products />} />
+            </Routes>
+          </Router>
+          <Outlet />
+        </DarkModeContext.Provider>
       </StoreDispatchContext.Provider>
     </StoreContext.Provider>
   );

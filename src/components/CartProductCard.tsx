@@ -2,12 +2,14 @@ import { memo } from 'react';
 import styled from 'styled-components';
 import { formatCurrency } from '../utils';
 import { useContext } from 'react';
-import { StoreDispatchContext } from '../utils/contexts';
+import { DarkModeContext, StoreDispatchContext } from '../utils/contexts';
 
-const StyledArticle = styled.article`
+const StyledArticle = styled.article<{ $darkMode: boolean }>`
   border-radius: 6px;
   padding: 1rem;
-  border: 1px solid #e4e4e4;
+  border-width: 1px;
+  border-style: solid;
+  border-color: ${(props) => (props.$darkMode ? '#6d6d6d' : '#e4e4e4')};
   margin-bottom: 0.8rem;
   h4 {
     text-align: right;
@@ -22,13 +24,14 @@ const StyledArticle = styled.article`
 
 const CartProductCard = ({ name, amount, price, id }) => {
   const dispatch = useContext(StoreDispatchContext);
+  const { darkMode } = useContext(DarkModeContext);
 
   const handleDeleteClick = () => {
     dispatch({ type: 'deleteFromCart', payload: id });
   };
 
   return (
-    <StyledArticle>
+    <StyledArticle $darkMode={darkMode}>
       <h3>{name}</h3>
       <small>
         <p>Precio: {formatCurrency(price)}</p>

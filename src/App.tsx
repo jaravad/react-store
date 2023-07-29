@@ -66,7 +66,7 @@ function App() {
       <StoreDispatchContext.Provider value={dispatch}>
         <DarkModeContext.Provider value={{ darkMode, toggleDarkMode }}>
           <Router>
-            <Toaster position="top-center" reverseOrder={false} />
+            <Toaster position="bottom-center" reverseOrder={false} />
             <NavBar />
             <Routes>
               <Route path="/" element={<Products />} />

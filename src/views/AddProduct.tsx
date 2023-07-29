@@ -34,7 +34,7 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="container pt-1">
+    <div className="container pt-1 pb-2">
       <h1 className="mb-1">Añadir producto</h1>
       <form className="add-product__form" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-1">

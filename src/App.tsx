@@ -18,6 +18,7 @@ import NavBar from './components/NavBar';
 import Products from './views/Products';
 import AddProduct from './views/AddProduct';
 import Cart from './views/Cart';
+import LogicTest from './views/LogicTest';
 import { AppStateType } from './types';
 
 let initialState: AppStateType;
@@ -72,6 +73,7 @@ function App() {
               <Route path="/" element={<Products />} />
               <Route path="/add-product" element={<AddProduct />} />
               <Route path="/cart" element={<Cart />} />
+              <Route path="/logic-test" element={<LogicTest />} />
               <Route path="*" element={<Products />} />
             </Routes>
           </Router>

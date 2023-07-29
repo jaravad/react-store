@@ -18,6 +18,7 @@ const StyledNav = styled.nav<{ $darkMode: boolean }>`
     li {
       a,
       button {
+        text-align: center;
         display: inline-block;
         border-radius: 6px;
         padding: 0.5rem;
@@ -44,12 +45,25 @@ const StyledNav = styled.nav<{ $darkMode: boolean }>`
       }
     }
   }
+
+  @media (max-width: 500px) {
+    ul {
+      li {
+        a,
+        button {
+          font-size: 0.8rem;
+          padding: 0.5rem 0.3rem;
+        }
+      }
+    }
+  }
 `;
 
 const navBarOptions = [
   { name: 'Productos', path: '/products' },
   { name: 'Añadir productos', path: '/add-product' },
   { name: 'Carrito', path: '/cart' },
+  { name: 'Test de lógica', path: '/logic-test' },
 ];
 
 const NavBar = () => {
